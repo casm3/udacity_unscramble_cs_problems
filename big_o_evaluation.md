@@ -119,6 +119,7 @@ print(
 ## Task 3
 
 ```py
+
 import csv
 
 with open('texts.csv', 'r') as f: # O(1)
@@ -129,9 +130,11 @@ with open('calls.csv', 'r') as f: # O(1)
     reader = csv.reader(f) # O(1)
     calls = list(reader) # O(n)
 
-    all_bangalore_calls = set() # O(1)
+    all_bangalore_calls = list() # O(1)
+    fixed_lines = list() # O(1)
+    mobile_numbers = set() # O(1)
     fixed_codes = set() # O(1)
-    fixed_lines = set() # O(1)
+    telemarketers = set() # O(1)
 
     for record in calls: # O(n)
         if record[0].startswith("(080)"):  # O(1) + O(5)
@@ -144,6 +147,10 @@ with open('calls.csv', 'r') as f: # O(1)
                 # The worst case for m is approximately ten numbers
                 if record[1].startswith("(080)"): # O(1) + O(5)
                     fixed_lines.add(record[1]) # O(1)
+            if " " in record[1]: # O(1)
+                mobile_numbers.add(record[1]) # O(1)
+        if record[0].startswith("140"): # O(3)
+            telemarketers.add(record[0]) # O(1)
 
     code_list = list(fixed_codes) # O(n)
     code_list.sort() # O(n log n)
@@ -163,7 +170,7 @@ with open('calls.csv', 'r') as f: # O(1)
         "calls to other fixed lines in Bangalore."
     ) # O(1)
 
-    # Estimated Final Time Complexity: O(n log n + 16n*m + 5n + 15) -> O(n log n)
+    # Estimated Final Time Complexity: O(n log n)
 ```
 
 ### Task 4
@@ -175,22 +182,32 @@ with open('texts.csv', 'r') as f: # O(1)
     reader = csv.reader(f) # O(1)
     texts = list(reader) # O(n)
 
+    all_texters = set() # O(1)
+
+    for record in texts: # O(n)
+        all_texters.add(record[0]) # O(1)
+        all_texters.add(record[1]) # O(1)
+
 with open('calls.csv', 'r') as f: # O(1)
     reader = csv.reader(f) # O(1)
     calls = list(reader) # O(n)
 
-    telemarketers = set() # O(1)
+    all_callers = set() # O(1)
+    receivers = set() # O(1)
 
     for record in calls: # O(n)
-        if record[0].startswith("140"): # O(3)
-            telemarketers.add(record[0]) # O(2)
+        all_callers.add(record[0]) # O(1)
+        receivers.add(record[1]) # O(1)
 
-    telemarketers_list = list(telemarketers) # O(n)
+    difference_set = all_callers - (receivers.union(all_texters))
+    # O(n+m+k))
+
+    telemarketers_list = list(difference_set) # O(n)
     telemarketers_list.sort() # O(n log n)
 
     print("These numbers could be telemarketers: ") # O(1)
     for telemarketer in telemarketers_list: # O(n)
         print(telemarketer) # O(1)
 
-    # Estimated Final Time Complexity: O(n log n + 9n + 6) -> O(n log n)
+    # Estimated Final Time Complexity: O(n log n + 9n + m + k + 8) -> O(n log n)
 ```

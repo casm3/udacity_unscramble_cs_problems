@@ -12,22 +12,25 @@ with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
 
-    all_bangalore_calls = set()
+    all_bangalore_calls = list()
+    fixed_lines = list()
     mobile_numbers = set()
     fixed_codes = set()
-    fixed_lines = set()
+    telemarketers = set()
 
     for record in calls:
         if record[0].startswith("(080)"):
-            all_bangalore_calls.add(record[1])
+            all_bangalore_calls.append(record[1])
             if record[1].startswith("(0"):
                 fixed_codes.add(
                     record[1][1:].split(")")[0]
                 )
                 if record[1].startswith("(080)"):
-                    fixed_lines.add(record[1])
+                    fixed_lines.append(record[1])
             if " " in record[1]:
                 mobile_numbers.add(record[1])
+        if record[0].startswith("140"):
+            telemarketers.add(record[0])
 
     code_list = list(fixed_codes)
     code_list.sort()

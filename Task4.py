@@ -8,17 +8,26 @@ with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
     texts = list(reader)
 
+    all_texters = set()
+
+    for record in texts:
+        all_texters.add(record[0])
+        all_texters.add(record[1])
+
 with open('calls.csv', 'r') as f:
     reader = csv.reader(f)
     calls = list(reader)
 
-    telemarketers = set()
+    all_callers = set()
+    receivers = set()
 
     for record in calls:
-        if record[0].startswith("140"):
-            telemarketers.add(record[0])
+        all_callers.add(record[0])
+        receivers.add(record[1])
 
-    telemarketers_list = list(telemarketers)
+    difference_set = all_callers - (receivers.union(all_texters))
+
+    telemarketers_list = list(difference_set)
     telemarketers_list.sort()
 
     print("These numbers could be telemarketers: ")
