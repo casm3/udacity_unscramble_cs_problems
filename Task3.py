@@ -30,6 +30,7 @@ with open('calls.csv', 'r') as f:
                     fixed_lines.append(record[1])
             if " " in record[1]:
                 mobile_numbers.add(record[1])
+                fixed_codes.add(record[1].split()[0][:4])
         if record[0].startswith("140"):
             telemarketers.add(record[0])
 
