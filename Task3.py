@@ -22,8 +22,9 @@ with open('calls.csv', 'r') as f:
         if record[0].startswith("(080)"):
             all_bangalore_calls.append(record[1])
             if record[1].startswith("(0"):
+                data = record[1].split(")")[0]
                 fixed_codes.add(
-                    record[1][1:].split(")")[0]
+                    f"{data})"
                 )
                 if record[1].startswith("(080)"):
                     fixed_lines.append(record[1])
